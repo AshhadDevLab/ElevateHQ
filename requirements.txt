@@ -2,3 +2,7 @@ Django>=5.0,<5.2
 gunicorn
 python-decouple
 psycopg[binary]
+django-allauth[socialaccount]
+django-allauth-ui
+django-widget-tweaks
+slippers
