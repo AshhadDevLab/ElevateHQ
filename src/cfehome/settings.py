@@ -68,6 +68,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.github',
     'widget_tweaks',
     'slippers',
+    "profiles",
+    "subscriptions"
 ]
 
 MIDDLEWARE = [
