@@ -45,7 +45,11 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "api.github.com"
+]
 
 # Application definition
 
@@ -61,6 +65,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.github',
     'widget_tweaks',
     'slippers',
 ]
@@ -181,5 +186,7 @@ STATIC_ROOT = BASE_DIR / "local-cdn"
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SOCIALACCOUNT_PROVIDERS = {
-    
+    "github": {
+        "VERIFIED_EMAIL":True
+    }
 }
