@@ -18,3 +18,12 @@ def create_customer(name="", email="", raw=False, metadata={}):
     if raw:
         return response
     return response.id
+
+def create_product(name="", raw=False, metadata={}):
+    response = stripe.Product.create(
+    name=name,
+    metadata=metadata
+    )
+    if raw:
+        return response
+    return response.id

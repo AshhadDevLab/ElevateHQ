@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import Permission, Group
 from django.conf import settings
 from django.db.models.signals import post_save
+from helpers.billing import create_product
 
 User = settings.AUTH_USER_MODEL
 
@@ -12,6 +13,7 @@ class Subscription(models.Model):
     name = models.CharField(max_length=255)
     groups = models.ManyToManyField(Group)
     permissions = models.ManyToManyField(Permission)
+    stripe_id = models.CharField(max_length=50, null=True, blank=True)
     
     def __str__(self):
         return f"{self.name}"
@@ -22,6 +24,13 @@ class Subscription(models.Model):
             ("pro", "Pro Permission"),
             ("basic", "Basic Permission"),
         ]
+    
+    def save(self, *args, **kwargs):
+        if not self.stripe_id:
+            stripe_id = create_product(name=self.name, raw=False, metadata={"subscription_plan_id": self.id})
+            self.stripe_id = stripe_id
+                    
+        super().save(*args, **kwargs)
 
 class UserSubscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
