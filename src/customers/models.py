@@ -17,7 +17,7 @@ class Customer(models.Model):
     
     def save(self, *args, **kwargs):
         email = self.user.email
-        if not self.strip_id:
+        if not self.stripe_id:
             if self.init_email_confirmed and self.init_email:
                 email = self.init_email
                 if email != "" or email is not None:
@@ -33,7 +33,7 @@ def allauth_user_signed_up_handler(request, user, *args, **kwargs):
 allauth_user_signed_up.connect(allauth_user_signed_up_handler)
 
 def allauth_email_confirmed_handler(request, email_address, *args, **kwargs):
-    qs = Customer.objects.fiter(init_email=email_address, init_email_confirmed=False)
+    qs = Customer.objects.filter(init_email=email_address, init_email_confirmed=False)
     for obj in qs:
         obj.init_email_confirmed = True
         obj.save()

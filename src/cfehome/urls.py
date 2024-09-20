@@ -16,16 +16,19 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-
+from checkouts.views import checkout_redirect_view, checkout_finalised_view, product_price_redirect_views
 from .views import home_view, about_view, pw_protected_view, user_only_view, staff_only_view
 from auth.views import login_view, register_view
 from subscriptions.views import subscriptions_price_view
 
 urlpatterns = [
-    path("", home_view, name="home"),
+    path('', home_view, name='home'),
     # path('register/', register_view),
     # path("login/", login_view),
-    path("about/", about_view),
+    path('checkout/sub-price/<int:price_id>/', product_price_redirect_views, name='sub-price-checkout'),
+    path('checkout/start/', checkout_redirect_view, name='stripe-checkout-start'),
+    path('checkout/sucess/', checkout_finalised_view, name='stripe-checkout-end'),
+    path('about/', about_view),
     path('hello-world/', home_view),
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),

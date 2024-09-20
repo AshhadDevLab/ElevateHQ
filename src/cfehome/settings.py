@@ -44,6 +44,8 @@ SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=False, cast=bool)
+BASE_URL = config("BASE_URL", default=None)
+
 
 ALLOWED_HOSTS = [
     "localhost",
@@ -70,7 +72,8 @@ INSTALLED_APPS = [
     'slippers',
     "profiles",
     "subscriptions",
-    "customers"
+    "customers",
+    "checkouts",
 ]
 
 MIDDLEWARE = [
