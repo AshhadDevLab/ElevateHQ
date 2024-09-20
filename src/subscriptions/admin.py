@@ -9,9 +9,9 @@ class SubscriptionPrice(admin.StackedInline):
     can_delete = False
 
 class SubscriptionAdmin(admin.ModelAdmin):
-    list_display = ["name", "active"]
+    list_display = ["name", "active", "featured"]
     search_fields = ["name"]
-    list_filter = ["active"]
+    list_filter = ["active", "featured"]
     inlines = [SubscriptionPrice]
     readonly_fields = ["stripe_id"]
 

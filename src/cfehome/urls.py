@@ -19,6 +19,7 @@ from django.urls import path, include
 
 from .views import home_view, about_view, pw_protected_view, user_only_view, staff_only_view
 from auth.views import login_view, register_view
+from subscriptions.views import subscriptions_price_view
 
 urlpatterns = [
     path("", home_view, name="home"),
@@ -32,4 +33,6 @@ urlpatterns = [
     path('protected/user-only', user_only_view),
     path('protected/staff-only', staff_only_view),
     path('profiles/', include('profiles.urls')),
+    path('pricing/', subscriptions_price_view, name='pricing'),
+    path('pricing/<str:interval>/', subscriptions_price_view, name='pricing'),
 ]

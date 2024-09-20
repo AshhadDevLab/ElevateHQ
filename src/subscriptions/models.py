@@ -11,13 +11,15 @@ ALLOW_CUSTOM_GROUPS = True
 class Subscription(models.Model):
     active = models.BooleanField(default=True)
     name = models.CharField(max_length=255)
+    subtitle = models.CharField(max_length=255, null=True, blank=True)
     groups = models.ManyToManyField(Group)
     permissions = models.ManyToManyField(Permission)
     stripe_id = models.CharField(max_length=50, null=True, blank=True)
     order = models.IntegerField(default=-1, help_text="Ordering on Django price page")
     featured = models.BooleanField(default=False, help_text="Featured on Django pricing page")
     updated = models.DateTimeField(auto_now=True)
-    timestamp = models.DateTimeField(auto_now_add=True)        
+    timestamp = models.DateTimeField(auto_now_add=True)       
+    features = models.TextField(null=True, blank=True, help_text="Separate features with new lines.")
     
     def __str__(self):
         return f"{self.name}"
@@ -27,8 +29,14 @@ class Subscription(models.Model):
             ("advanced", "Advanced Permission"),
             ("pro", "Pro Permission"),
             ("basic", "Basic Permission"),
+            ("enterprise", "Enterprise Permission"),
         ]
         ordering = ["order", "featured", "-updated"]
+    
+    def get_features_as_list(self):
+        if not self.features:
+            return []
+        return [x.strip() for x in self.features.split("\n")]
     
     def save(self, *args, **kwargs):
         if not self.stripe_id:
@@ -54,6 +62,21 @@ class SubscriptionPrice(models.Model):
     
     class Meta:
         ordering = ["subscription__order", "order", "featured", "-updated"]
+        
+    @property
+    def display_subtitle(self):
+        return self.subscription.subtitle
+        
+    @property
+    def display_features_list(self):
+        if not self.subscription:
+            return []
+        return self.subscription.get_features_as_list()
+        
+    @property
+    def display_sub_name(self):
+        if self.subscription:
+            return self.subscription.name
         
     @property
     def stripe_price(self):
