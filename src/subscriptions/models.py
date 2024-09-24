@@ -15,7 +15,7 @@ class Subscription(models.Model):
     subtitle = models.CharField(max_length=255, null=True, blank=True)
     groups = models.ManyToManyField(Group)
     permissions = models.ManyToManyField(Permission)
-    stripe_id = models.CharField(max_length=50, null=True, blank=True)
+    stripe_id = models.CharField(max_length=250, null=True, blank=True)
     order = models.IntegerField(default=-1, help_text="Ordering on Django price page")
     featured = models.BooleanField(default=False, help_text="Featured on Django pricing page")
     updated = models.DateTimeField(auto_now=True)
@@ -52,14 +52,18 @@ class SubscriptionPrice(models.Model):
         MONTHLY = "month", "Monthly"
         YEARLY = "year", "Yearly"
     
-    subscription = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null  =True)
-    stripe_id = models.CharField(max_length=50, null=True, blank=True)
+    name = models.CharField(max_length=255, null=True, blank=True)
+    subscription = models.ForeignKey(Subscription, on_delete=models.CASCADE, null=True)
+    stripe_id = models.CharField(max_length=250, null=True, blank=True)
     interval = models.CharField(max_length=50, default=IntervalChoices.MONTHLY, choices=IntervalChoices.choices)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=99.99)
     order = models.IntegerField(default=-1, help_text="Ordering on Django price page")
     featured = models.BooleanField(default=False, help_text="Featured on Django pricing page")
     updated = models.DateTimeField(auto_now=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.name}"
     
     class Meta:
         ordering = ["subscription__order", "order", "featured", "-updated"]
@@ -109,6 +113,7 @@ class SubscriptionPrice(models.Model):
             raw=False
             )
             self.stripe_id = stripe_id
+            self.name = self.subscription.name + " " + self.interval + " Price"
         super().save(*args, **kwargs)
         if self.featured and self.subscription:
             SubscriptionPrice.objects.filter(subscription=self.subscription, interval=self.interval).exclude(id=self.id).update(featured=False)
@@ -119,7 +124,7 @@ class UserSubscription(models.Model):
     active = models.BooleanField(default=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.subscriptions.name}"
+        return f"{self.user.username} - {self.subscriptions.name if self.subscriptions else 'No Subscription'}"
 
 def user_sub_post_save(sender, instance, created, *args, **kwargs):
     print(instance)
@@ -136,7 +141,7 @@ def user_sub_post_save(sender, instance, created, *args, **kwargs):
         subs_qs = Subscription.objects.filter(active=True)
         if subscription_obj is not None:
             subs_qs = subs_qs.exclude(id=subscription_obj.id)
-        subs_groups = subs_qs.groups.values_list("groups__id", flat=True)
+        subs_groups = subs_qs.values_list("groups__id", flat=True)
         subs_groups_set = set(subs_groups)
         # group_ids = groups.values_list("id", flat=True)
         current_groups = user.groups.all().values_list("id", flat=True)
