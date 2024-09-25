@@ -75,7 +75,7 @@ def get_subscription(stripe_id, raw=True):
     response = stripe.Subscription.retrieve(stripe_id)
     if raw:
         return response
-    return response.url
+    return serialize_subscription_data(response)
 
 def cancel_subscription(stripe_id, reason="", feedback="other", raw=True):
     response = stripe.Subscription.cancel(stripe_id, cancellation_details={"comment": reason, "feedback": feedback})
