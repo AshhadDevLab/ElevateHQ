@@ -1,5 +1,6 @@
 import stripe
 from decouple import config
+from .date_utils import timestamp_as_datetime
 
 DJANGO_DEBUG=config("DJANGO_DEBUG", default=False, cast=bool)
 STRIPE_SECRET_KEY=config("STRIPE_SECRET_KEY", default="", cast=str)
@@ -76,10 +77,34 @@ def get_subscription(stripe_id, raw=True):
         return response
     return response.url
 
+def cancel_subscription(stripe_id, reason="", feedback="other", raw=True):
+    response = stripe.Subscription.cancel(stripe_id, cancellation_details={"comment": reason, "feedback": feedback})
+    if raw:
+        return response
+    return response.url
+
+def serialize_subscription_data(subscription_response):
+    status = subscription_response.status
+    current_period_start = timestamp_as_datetime(subscription_response.current_period_start)
+    current_period_end = timestamp_as_datetime(subscription_response.current_period_end)
+    return {
+        "current_period_start": current_period_start,
+        "current_period_end": current_period_end,
+        "status": status,
+    }
+
 def get_checkout_customer_plan(session_id):
     checkout_r = get_checkout_session(session_id, raw=True)
     customer_id = checkout_r.customer
     sub_stripe_id = checkout_r.subscription
     sub_r = get_subscription(sub_stripe_id, raw=True)
     sub_plan = sub_r.plan
-    return customer_id, sub_plan.id
+    subscription_data = serialize_subscription_data(sub_r)
+    
+    data = {
+        "customer_id": customer_id,
+        "plan_id": sub_plan.id,
+        "sub_stripe_id": sub_stripe_id,
+        **subscription_data,
+    }
+    return data
