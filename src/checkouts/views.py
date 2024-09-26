@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.http import HttpResponseBadRequest
+from django.contrib import messages
 User = get_user_model()
 
 # Create your views here.
@@ -87,6 +88,8 @@ def checkout_finalised_view(request):
         # assign new sub
         for k, v in updated_sub_options.items():
             setattr(_user_sub_obj, k, v)
-        _user_sub_obj.save()    
+        _user_sub_obj.save()
+        messages.success(request, "Success! Thank you for joining.")
+        return redirect(_user_sub_obj.get_absolute_url())
     context = {}
     return render(request, "checkout/success.html", context)

@@ -118,8 +118,7 @@ class SubscriptionPrice(models.Model):
         if self.featured and self.subscription:
             SubscriptionPrice.objects.filter(subscription=self.subscription, interval=self.interval).exclude(id=self.id).update(featured=False)
 
-class UserSubscription(models.Model):
-    class SubscriptionStatus(models.TextChoices):
+class SubscriptionStatus(models.TextChoices):
         ACTIVE = "active", "Active",
         TRIALING = "trialing", "Trialing",
         INCOMPLETE = "incomplete", "Incomplete",
@@ -127,7 +126,9 @@ class UserSubscription(models.Model):
         PAST_DUE = "past_due", "Past Due",
         CANCELLED = "cancelled", "Cancelled",
         UNPAID = "unpaid", "Unpaid",
-        PAUSED = "paused", "Paused",        
+        PAUSED = "paused", "Paused",
+
+class UserSubscription(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     subscriptions = models.ForeignKey(Subscription, on_delete=models.SET_NULL, null=True, blank=True)
     active = models.BooleanField(default=True)
@@ -136,16 +137,23 @@ class UserSubscription(models.Model):
     original_period_start = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     current_period_start = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
     current_period_end = models.DateTimeField(auto_now=False, auto_now_add=False, null=True, blank=True)
+    cancel_at_period_end = models.BooleanField(default=False)
     status = models.CharField(max_length=20, null=True, blank=True, choices=SubscriptionStatus.choices)
-
+    
     def get_absolute_url(self):
         return reverse("user_subscription")
+    
+    def get_cancel_url(self):
+        return reverse("user_subscription_cancel")
     
     @property
     def plan_name(self):
         if not self.subscriptions:
             return None
         return self.subscriptions.name
+    @property
+    def is_active_status(self):
+        return self.status in [SubscriptionStatus.ACTIVE, SubscriptionStatus.TRIALING]
     
     def serialize(self):
         return {
