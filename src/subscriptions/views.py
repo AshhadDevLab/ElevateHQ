@@ -28,7 +28,7 @@ def user_subscriptions_cancel_view(request):
     if request.method == "POST":
         print("refresh sub")
         if user_sub_obj.stripe_id and user_sub_obj.is_active_status:
-            sub_data = cancel_subscription(user_sub_obj.stripe_id, raw=False, reason="User wanted to end", feedback="other")
+            sub_data = cancel_subscription(user_sub_obj.stripe_id, raw=False, reason="User wanted to end", feedback="other", cancel_at_period_end=True)
             for k,v in sub_data.items():
                 setattr(user_sub_obj, k, v)
             user_sub_obj.save()
