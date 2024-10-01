@@ -3,19 +3,12 @@ from customers.models import Customer
 from subscriptions.models import UserSubscription, Subscription, SubscriptionStatus
 from django.db.models import Q
 
-def refresh_active_users_subscription(user_ids= None):
+def refresh_active_users_subscription(user_ids= None, active_only= True):
     qs = UserSubscription.objects.all()
-    active_qs_lookup = (
-        Q(status= SubscriptionStatus.ACTIVE) | 
-        Q(status= SubscriptionStatus.TRIALING)
-    )
-    qs = qs.filter(active_qs_lookup)
-    if isinstance(qs, list):
-        qs = qs.filter(user_id__in= user_ids)
-    elif isinstance(user_ids, int):
-        qs = qs.filter(user_id__in= [user_ids])
-    elif isinstance(user_ids, str):
-        qs = qs.filter(user_id__in= [user_ids])
+    if active_only:
+        qs = qs.by_active_trialing()
+    if user_ids is not None:
+        qs = qs.by_user_ids(user_ids= user_ids)
     
     complete_count= 0
     qs_count= qs.count( )
