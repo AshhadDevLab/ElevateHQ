@@ -14,8 +14,8 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any):
         days_left = options.get("days_left")
         days_ago = options.get("days_ago")
-        day_start = options.get("days_start")
-        day_end = options.get("days_end")
+        day_start = options.get("day_start")
+        day_end = options.get("day_end")
         clear_dangling = options.get("clear_dangling")
         if clear_dangling:
             clear_dangling_subs()
