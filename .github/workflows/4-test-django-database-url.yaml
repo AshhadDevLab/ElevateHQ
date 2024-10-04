@@ -22,7 +22,7 @@ jobs:
       - name: Setup Django Secret Key
         run: |
           MY_GEN_KEY=$(openssl rand -base64 32)
-          echo "DJANGO_SECRET_KEY=$MY_GEN_KEY" >> $GITHUB_ENV
+          echo "SECRET_KEY=$MY_GEN_KEY" >> $GITHUB_ENV
       - name: Show DATABASE_URL
         run: |
           echo ${{ env.DATABASE_URL }}
@@ -32,7 +32,5 @@ jobs:
           python -m pip install -r requirements.txt
       - name: Django Tests
         working-directory: ./src
-        env:
-          DJANGO_SECRET_KEY: not-good
         run: |
           python manage.py test
