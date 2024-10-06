@@ -29,7 +29,6 @@ from .views import (
     user_only_view,
     staff_only_view,
 )
-from auth.views import login_view, register_view
 from subscriptions.views import (
     subscriptions_price_view,
     user_subscriptions_view,
