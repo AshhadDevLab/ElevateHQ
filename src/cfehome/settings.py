@@ -73,6 +73,7 @@ INSTALLED_APPS = [
     "subscriptions",
     "customers",
     "checkouts",
+    "commando"
 ]
 
 MIDDLEWARE = [

@@ -1,4 +1,4 @@
-import helpers
+from helpers.downloader import download_to_local
 
 from typing import Any
 from django.conf import settings
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         completed_urls = []
         for name, url in VENDOR_STATICFILES.items():
             out_path = STATICFILES_VENDOR_DIR / name
-            dl_success = helpers.download_to_local(url, out_path)
+            dl_success = download_to_local(url, out_path)
             if dl_success:
                 completed_urls.append(url)
             else:
