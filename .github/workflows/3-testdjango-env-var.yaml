@@ -8,21 +8,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Export Environment Variables
-      run: |
-        echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
-        echo "DEBUG=${{ secrets.DEBUG }}" >> $GITHUB_ENV
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
-        echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
-        echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
-        echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> $GITHUB_ENV
-        echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> $GITHUB_ENV
-        echo "EMAIL_USE_TLS=${{ secrets.EMAIL_USE_TLS }}" >> $GITHUB_ENV
-        echo "EMAIL_USE_SSL=${{ secrets.EMAIL_USE_SSL }}" >> $GITHUB_ENV
-        echo "ADMIN_USER_Name=${{ secrets.ADMIN_USER_Name }}" >> $GITHUB_ENV
-        echo "ADMIN_USER_EMAIL=${{ secrets.ADMIN_USER_EMAIL }}" >> $GITHUB_ENV
-        echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> $GITHUB_ENV
-        echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
-    steps:
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> $GITHUB_ENV
+          echo "DEBUG=${{ secrets.DEBUG }}" >> $GITHUB_ENV
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> $GITHUB_ENV
+          echo "EMAIL_HOST=${{ secrets.EMAIL_HOST }}" >> $GITHUB_ENV
+          echo "EMAIL_PORT=${{ secrets.EMAIL_PORT }}" >> $GITHUB_ENV
+          echo "EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }}" >> $GITHUB_ENV
+          echo "EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }}" >> $GITHUB_ENV
+          echo "EMAIL_USE_TLS=${{ secrets.EMAIL_USE_TLS }}" >> $GITHUB_ENV
+          echo "EMAIL_USE_SSL=${{ secrets.EMAIL_USE_SSL }}" >> $GITHUB_ENV
+          echo "ADMIN_USER_Name=${{ secrets.ADMIN_USER_Name }}" >> $GITHUB_ENV
+          echo "ADMIN_USER_EMAIL=${{ secrets.ADMIN_USER_EMAIL }}" >> $GITHUB_ENV
+          echo "STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "BASE_URL=${{ secrets.BASE_URL }}" >> $GITHUB_ENV
       - name: Checkout Code
         uses: actions/checkout@v4
       - name: Setup Python
