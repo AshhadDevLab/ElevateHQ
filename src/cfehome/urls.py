@@ -34,10 +34,10 @@ from subscriptions.views import (
     user_subscriptions_view,
     user_subscriptions_cancel_view,
 )
-from landing.views import landing_page_view
+from landing.views import landing_dashboard_page_view
 
 urlpatterns = [
-    path("", landing_page_view, name="home"),
+    path("", landing_dashboard_page_view, name="home"),
     # path('register/', register_view),
     # path("login/", login_view),
     path(

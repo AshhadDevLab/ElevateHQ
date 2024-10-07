@@ -19,6 +19,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any):
         self.stdout.write("Downloading vendor static files")
         completed_urls = []
+        print(STATICFILES_VENDOR_DIR)
         for name, url in VENDOR_STATICFILES.items():
             out_path = STATICFILES_VENDOR_DIR / name
             dl_success = download_to_local(url, out_path)
