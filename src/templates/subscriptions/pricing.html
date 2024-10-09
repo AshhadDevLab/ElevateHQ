@@ -7,26 +7,45 @@
 <section class="bg-white dark:bg-gray-900">
     <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
         <div class="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
-            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">Designed for business teams like yours</h2>
-            <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">Here at SaaS we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.</p>
+            <h2 class="mb-4 text-4xl tracking-tight font-extrabold text-gray-900 dark:text-white">
+                Designed for business teams like yours
+            </h2>
+            <p class="mb-5 font-light text-gray-500 sm:text-xl dark:text-gray-400">
+                Here at ElevateHQ we focus on markets where technology, innovation, and capital can unlock long-term value and drive economic growth.
+            </p>
         </div>
-        <div class="flex justify-center">
-            <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400">
+        
+        <!-- Flex container for Yearly and Monthly buttons -->
+        <div class="flex justify-center mb-8">  <!-- Added margin bottom (mb-8) to create space below buttons -->
+            <ul class="flex flex-wrap text-sm font-medium text-center text-gray-500 dark:text-gray-400 space-x-4"> <!-- Added space between the buttons (space-x-4) -->
                 <li class="me-2">
-                    <a href="{{ url_yearly }}" class="{% if active == 'year' %}inline-block px-4 py-3 text-white bg-blue-600 rounded-lg active{% else %}inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white{% endif %}" aria-current="page">Yearly</a>
+                    <a
+                        href="{{ url_yearly }}"
+                        class="{% if active == 'year' %}inline-block px-4 py-3 text-white bg-blue-600 rounded-lg active{% else %}inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white{% endif %}"
+                        aria-current="page"
+                    >
+                        Yearly
+                    </a>
                 </li>
                 <li class="me-2">
-                    <a href="{{ url_monthly }}" class="{% if active == 'month' %}inline-block px-4 py-3 text-white bg-blue-600 rounded-lg active{% else %}inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white{% endif %}">Monthly</a>
+                    <a
+                        href="{{ url_monthly }}"
+                        class="{% if active == 'month' %}inline-block px-4 py-3 text-white bg-blue-600 rounded-lg active{% else %}inline-block px-4 py-3 rounded-lg hover:text-gray-900 hover:bg-gray-100 dark:hover:bg-gray-800 dark:hover:text-white{% endif %}"
+                    >
+                        Monthly
+                    </a>
                 </li>
             </ul>
         </div>
-        <div class="space-y-8 md:space-y-0 lg:grid lg:grid-cols-3 sm:gap-6 xl:gap-10 lg:space-y-0 pt-8">
+
+        <!-- Pricing Cards Grid -->
+        <div class="pt-8 space-y-8 md:space-y-0 lg:grid lg:grid-cols-3 sm:gap-8 xl:gap-10 lg:space-y-0">
             <!-- Pricing Cards -->
-                {% for price_obj in object_list %}
-                    {% include 'subscriptions/snippets/pricing-card.html' with obj=price_obj %}
-                {% endfor %}
+            {% for price_obj in object_list %}
+                {% include 'subscriptions/snippets/pricing-card.html' with obj=price_obj %}
+            {% endfor %}
         </div>
     </div>
-  </section>
+</section>
 
 {% endblock content %}
